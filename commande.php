@@ -1,8 +1,22 @@
+<?php
+session_start();
+if(!isset($_SESSION['login_user']))
+	{
+		header('Location: login.php');
+		die;
+	}
+?>
 <?PHP
 include "../core/CommandeC.php";
 $Commande1C=new CommandeC();
 $listeCommandes=$Commande1C->affichercommandes();
-
+function checkInput($data)
+						{
+							$data = trim($data);
+							$data = stripslashes($data);
+							$data = htmlspecialchars($data);
+							return $data;
+						}
 //var_dump($listeEmployes->fetchAll());
 ?>
 <!DOCTYPE html>
@@ -546,6 +560,9 @@ Danny Donovan
                                         <input type = "search" name = "terme" placeholder="ID Commande">
                                         <input  type = "submit" name = "s" value="Rechercher" class="btn btn-warning btn-rounded ">
                                     </form>
+									<form action = "commandenonvalider.php" method = "get">
+									<input type="submit" value="afficher les commandes non valider" class="btn btn-warning btn-rounded ">
+									</form>
 								</div>
 </div>
 
@@ -556,12 +573,11 @@ Danny Donovan
 <thead>
 <tr>
 <td class="text-dark text-semibold">ID Commande</td>
-<td class="text-dark text-semibold">ID Client</td>
+<td class="text-dark text-semibold">pseudo Client</td>
 <td class="text-dark text-semibold">Date Achat</td>
 <td class="text-dark text-semibold">ID Ligne commande</td>
 <td class="text-dark text-semibold">Valide</td>
 <td class="text-dark text-semibold">Valider une commande</td>
-<td class="text-dark text-semibold"><a href="commandenonvalider.php">Afficher commandes non traitées</a></td>
 <td class="text-dark text-semibold">Suppression</td>
 
 </tr>
@@ -572,7 +588,19 @@ foreach($listeCommandes as $row){
 	?>
 	<tr>
 	<td><?PHP echo $row['id_commande']; ?></td>
-	<td><?PHP echo $row['id_utilisateur']; ?></td>
+	<td>
+	<?PHP
+	
+	$reference=$row['id_utilisateur'];
+	
+	$id = checkInput($reference);		
+	$db = config::getConnexion();
+	$statement = $db->prepare("SELECT * FROM membre WHERE id= ?");
+	$statement->execute(array($id));
+	$item = $statement->fetch();
+	echo $item['pseudo'];
+	?>
+	</td>
 	<th style="width: 232px;"><?PHP echo $row['dateAchat']; ?></th>
 	<td><a href="#"><?PHP echo $row['id_ligne']; ?></td>
 	<td>
@@ -593,7 +621,7 @@ foreach($listeCommandes as $row){
 	<input type="hidden" value="<?PHP echo $row['id_commande']; ?>" name="id_commande">
 	</form>
 	</td>
-	<td></td>
+	
 	</td>
 	<td><form method="POST" action="supprimerCommande.php">
 	<input type="submit" name="supprimer" value="supprimer" class="btn btn-secondary btn-rounded">
