@@ -266,14 +266,20 @@ Danny Donovan
 </span>
 </a>
 <ul class="dropdown-menu sub-down">
+<li>
+<a href="Reservation.php">Reservation</a>
+</li>
+<li>
+<a href="livraison.php">Livraison</a>
+</li>
+<li>
+<a href="livreur.php">Livreur</a>
+</li>
 <li class="active">
-<a href="index-2.html">Dashboard 1</a>
-</li>
-<li>
-<a href="index-3.html">Dashboard 2</a>
-</li>
-<li>
 <a href="commande.php">Commande</a>
+</li>
+<li>
+<a href="fidelite.php">Fidelite</a>
 </li>
 </ul>
 </li>
@@ -536,20 +542,30 @@ Danny Donovan
 <div class="col-lg-8 col-md-12 col-xs-12">
 <div class="card">
  <div class="card-header">
-<h4 class="card-title">Les Comamndes</h4>
-
+<h4 class="card-title">Tableau des commandes</h4>
+	<div class="selected float-right">
+								<div class="search-content">
+                                    <form action = "rechercher1.php" method = "get">
+                                        <input type = "search" name = "terme" placeholder="ID Commande">
+                                        <input  type = "submit" name = "s" value="Rechercher" class="btn btn-warning btn-rounded ">
+                                    </form>
+									<form action = "commandenonvalider.php" method = "get">
+									<input type="submit" value="afficher les commandes non valider" class="btn btn-warning btn-rounded ">
+									</form>
+								</div>
+</div>
 </div>
 <div class="table-overflow">
 <table class="table table-hover table-lg">
 <thead>
 <tr>
-<td class="text-dark text-semibold">L'identifiant du commande:</td>
-<td class="text-dark text-semibold">L'identifiant du client</td>
-<td class="text-dark text-semibold">Date d'achat</td>
-<td class="text-dark text-semibold">Les produit achetes</td>
+<td class="text-dark text-semibold">ID Commande</td>
+<td class="text-dark text-semibold">pseudo Client</td>
+<td class="text-dark text-semibold">Date Achat</td>
+<td class="text-dark text-semibold">ID Ligne commande</td>
 <td class="text-dark text-semibold">Valide</td>
-<td class="text-dark text-semibold">valider une commande</td>
-<td class="text-dark text-semibold"><a href="commandenonvalider.php">afficher les commande non traité</td>
+<td class="text-dark text-semibold">Valider une commande</td>
+<td class="text-dark text-semibold">Suppression</td>
 </tr>
 <thead>
 <tbody>
@@ -577,7 +593,7 @@ foreach($listecommandes as $row){
 	</td>
 	
 	<td><form method="POST" action="supprimerCommande.php">
-	<input type="submit" name="valider" value="valider">
+	<input type="submit" name="valider" value="valider" class="btn btn-primary btn-rounded">
 	<input type="hidden" value="<?PHP echo $row['id_commande']; ?>" name="id_commande">
 	</form>
 	</td>

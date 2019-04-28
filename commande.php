@@ -17,7 +17,6 @@ function checkInput($data)
 							$data = htmlspecialchars($data);
 							return $data;
 						}
-//var_dump($listeEmployes->fetchAll());
 ?>
 <!DOCTYPE html>
 <html>
@@ -539,6 +538,18 @@ Danny Donovan
 <div class="breadcrumb-wrapper row">
 <div class="col-12 col-lg-3 col-md-6">
 <h4 class="page-title">Commande</h4>
+<form method="POST" action="generate_pdf.php">
+<input type="submit" value="telecharger l'archive des commande">
+</form>
+<form method="POST" action="livesearch.php">
+<input type="submit" value="rechercher dans l'archive">
+</form>
+<form method="POST" action="pagination.php">
+<input type="submit" value="Montrer 3 commande par page">
+</form>
+<form method="POST" action="trie.php">
+<input type="submit" value="diagramme circulaire sur les commandes passées par année ">
+</form>
 </div>
 <div class="col-12 col-lg-9 col-md-6">
 <ol class="breadcrumb float-right">
@@ -589,20 +600,25 @@ foreach($listeCommandes as $row){
 	<tr>
 	<td><?PHP echo $row['id_commande']; ?></td>
 	<td>
-	<?PHP
-	
-	$reference=$row['id_utilisateur'];
-	
-	$id = checkInput($reference);		
-	$db = config::getConnexion();
-	$statement = $db->prepare("SELECT * FROM membre WHERE id= ?");
-	$statement->execute(array($id));
-	$item = $statement->fetch();
-	echo $item['pseudo'];
-	?>
+		<?PHP
+		
+		$reference=$row['id_utilisateur'];
+		
+		$id = checkInput($reference);		
+		$db = config::getConnexion();
+		$statement = $db->prepare("SELECT * FROM membre WHERE id= ?");
+		$statement->execute(array($id));
+		$item = $statement->fetch();
+		echo $item['pseudo'];
+		?>
 	</td>
 	<th style="width: 232px;"><?PHP echo $row['dateAchat']; ?></th>
-	<td><a href="#"><?PHP echo $row['id_ligne']; ?></td>
+	<td>
+		<form method="POST" action="detail.php">
+		<input type="submit" value="detail" class="btn btn-outline-info">
+		<input type="hidden" value="<?PHP echo $row['id_ligne']; ?>" name="id_ligne">
+		</form>
+	</td>
 	<td>
 	<?PHP 
 	if ($row ['valide']==null) 
